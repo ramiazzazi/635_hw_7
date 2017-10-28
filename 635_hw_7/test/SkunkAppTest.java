@@ -41,6 +41,14 @@ public class SkunkAppTest {
 		assertEquals("first die is not a 1", 1, d.getDie1Roll());
 		assertEquals("second die is not a 1", 1, d.getDie2Roll());
 	}
+	
+	@Test
+	public void die_one_is_not_die_two()
+	{
+		Dice d = new Dice(new int[] {1}, new int[] {6});
+		d.roll();
+		assertNotEquals("first die equals second die:", d.getDie1Roll(), d.getDie2Roll());
+	}
 
 }
 //Just added a comment	
