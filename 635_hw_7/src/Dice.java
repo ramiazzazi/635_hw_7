@@ -1,10 +1,12 @@
 
 public class Dice 
 {
-	private int dieInputs;
+	private int die1Inputs;
+	private int die2Inputs;
 	private int[] die1Rolls;
 	private int[] die2Rolls;
-	private int loadedDieIndex;
+	private int loadedDie1Index;
+	private int loadedDie2Index;
 	
 	private int lastDie1Roll;
 	private int lastDie2Roll;
@@ -14,22 +16,30 @@ public class Dice
 	
 	}
 	
-	public Dice(int[] die1Rolls, int[] die2Rolls, int dieInputs)
+	public Dice(int[] die1Rolls, int[] die2Rolls)
 	{
-		loadedDieIndex = 0;
-		this.dieInputs = dieInputs;
+		loadedDie1Index = 0;
+		loadedDie2Index = 0;
+		
 		this.die1Rolls = die1Rolls;
 		this.die2Rolls = die2Rolls;
+		
+		die1Inputs = die1Rolls.length;
+		die2Inputs = die2Rolls.length;
 	}
 	
 	public void roll()
 	{
-		lastDie1Roll = die1Rolls[loadedDieIndex];
-		lastDie2Roll = die2Rolls[loadedDieIndex];
+		lastDie1Roll = die1Rolls[loadedDie1Index];
+		lastDie2Roll = die2Rolls[loadedDie2Index];
 		
-		loadedDieIndex++;
-		if (loadedDieIndex >= dieInputs)
-			loadedDieIndex = 0;
+		loadedDie1Index++;
+		if (loadedDie1Index >= die1Inputs )
+			loadedDie1Index = 0;
+		
+		loadedDie2Index++;
+		if (loadedDie2Index >= die1Inputs )
+			loadedDie2Index = 0;
 	}
 	
 	public int getDie1Roll()
