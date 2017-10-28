@@ -82,7 +82,7 @@ public class PlayWithInheritance
 		{
 			Die another = new Die();
 
-			Dice dice = new Dice(aSingleDie, crooked1); // we'll try substituting here
+			PairOfDice dice = new PairOfDice(aSingleDie, crooked1); // we'll try substituting here
 
 			dice.roll();
 

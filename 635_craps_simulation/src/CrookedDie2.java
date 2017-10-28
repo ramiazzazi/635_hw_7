@@ -10,12 +10,12 @@ public class CrookedDie2 extends Die // subclassing
 	{
 		// call the inherited method to get lastRoll from parent Die parts
 
-		int testRoll = getLastRoll();
+		int lastRollValue = getLastRoll();
 
-		if (testRoll == 6)
+		if (lastRollValue == 6)
 			this.setLastRoll(1);
 		else
-			this.setLastRoll(testRoll + 1);
+			this.setLastRoll(lastRollValue + 1);
 	}
 
 	public String toString()

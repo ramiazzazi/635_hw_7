@@ -1,8 +1,7 @@
 // foo again
 public class CrapsGame
 {
-	private int point;
-	private Dice dice;
+	private PairOfDice dice;
 	public static boolean showOutput = true;
 
 	public static void println(String str)
@@ -13,89 +12,55 @@ public class CrapsGame
 
 	public CrapsGame()
 	{
-		dice = new Dice();
+		dice = new PairOfDice();
 	}
 
 	public CrapsGame(Die die1, Die die2)
 	{
-		dice = new Dice(die1, die2);
+		dice = new PairOfDice(die1, die2);
 	}
 
-	public boolean playOneGame(int[] wins, int[] losses)
-	{
-		int steps = 1;
+	
+	private int sumOfPair;
 
-		// Roll the dice
-		// Get the value of the roll as point
-		// Print out this value as 'first roll'
+	public boolean playOneGame(int[] winsPerRoll, int[] lossesPerRoll)
+	{
+		int rollNumber = 1;
 
 		doFirstRoll();
 
-		// If point is 7 or 11, announce an immediate win for player,
-		// increment wins[steps], and return true indicating win
-		
-		if (point == 7 || point == 11)
+		if (isFirstRollWin())
 		{
-			return winForPlayer(wins, steps);
+			return singleWinForPlayer(winsPerRoll, rollNumber);
 		}
-		else if (point==2 || point == 3 || point==12)
+		else if (isFirstRollLoss())
 		{
-			return lossForPlayer(losses, steps);
+			return singleLossForPlayer(lossesPerRoll, rollNumber);
 		}
-
-		// Else if point is 2, 3, or 12, announce an immediate loss for player,
-		// increment losses[steps], and return false indicating loss
-
-		// If not an immediate win nor loss, print out point
-		// roll the dice over and over, keeping track of steps,
-		// and printing each rolled value until either:
-
-		// (a) The point is again rolled => a win for player:
-		// update wins[] and return true
-
-		// (b) 7 is rolled => a loss for player:
-		// update losses[] and return false
-		
 		else // point rolled: keep going until point rerolled OR 7 rolled
 		{
-			println("Point is: " + point);
+			println("Point is: " + sumOfPair);
 			
-			int value = 0;
+			int newRollValue = 0;
 			do
 			{
 				dice.roll();
-				steps++;
-				value = dice.getLastRoll();
-				println("Next roll is: " + value);
+				rollNumber++;
+				newRollValue = dice.getLastRoll();
+				println("Next roll is: " + newRollValue);
 			}
-			while (value != 7 && value != point);
-	
-			// the following is equivalent to the above.
-			// Is it easier to understand?
+			while (isNeitherWinNorLoss(newRollValue));
 			
-//			while (true)
-//			{
-//				dice.roll();
-//				value = dice.getLastRoll();
-//				println("Next roll is: " + value);
-//				if (value==7)
-//					break;
-//				if (value==point)
-//					break;
-//			}
-			
-			if (value==7)
+			if (isRerollLoss(newRollValue))
 			{
-				// loss: record losses and return false
 				println("You lose throwing a 7.");
-				losses[steps]++;
+				lossesPerRoll[rollNumber]++;
 				return false;
 			}
-			else if (value==point)
+			else if (isRerollWin(newRollValue))
 			{
-				// win: record wins and return false
-				println("You win by throwing your point " + value);
-				wins[steps]++;
+				println("You win by throwing your point " + newRollValue);
+				winsPerRoll[rollNumber]++;
 				return true;
 
 			}
@@ -104,11 +69,40 @@ public class CrapsGame
 		return false;
 	}
 
-	private boolean lossForPlayer(int[] losses, int steps)
+	//extracted method during refactoring
+	private boolean isRerollWin(int newRollValue)
 	{
-		println("Loss for player with " + point);
-		losses[steps] = losses[steps] + 1; // number of losses with exactly steps # of steps.
-		// losses[steps]++; 
+		return newRollValue==sumOfPair;
+	}
+
+	//extracted method during refactoring
+	private boolean isRerollLoss(int newRollValue)
+	{
+		return newRollValue==7;
+	}
+
+	//extracted method during refactoring
+	private boolean isNeitherWinNorLoss(int newRollValue)
+	{
+		return newRollValue != 7 && newRollValue != sumOfPair;
+	}
+	
+	//extracted method during refactoring
+	private boolean isFirstRollLoss()
+	{
+		return sumOfPair==2 || sumOfPair == 3 || sumOfPair==12;
+	}
+
+	//extracted method during refactoring
+	private boolean isFirstRollWin()
+	{
+		return sumOfPair == 7 || sumOfPair == 11;
+	}
+
+	private boolean singleLossForPlayer(int[] lossesPerRoll, int rollNumber)
+	{
+		println("Loss for player with " + sumOfPair);
+		lossesPerRoll[rollNumber]++; 
 		return false;
 	}
 
@@ -116,16 +110,15 @@ public class CrapsGame
 	{
 		dice.roll();
 
-		point = dice.getLastRoll();
+		sumOfPair = dice.getLastRoll();
 
 		println("First roll is: " + dice.getLastRoll());
 	}
 
-	private boolean winForPlayer(int[] wins, int steps)
+	private boolean singleWinForPlayer(int[] winsPerRoll, int rollNumber)
 	{
-		println("Win for player with " + point);
-		wins[steps] = wins[steps] + 1; // number of wins with exactly steps # of steps.
-		// wins[steps]++; 
+		println("Win for player with " + sumOfPair);
+		winsPerRoll[rollNumber]++; 
 		return true;
 	}
 

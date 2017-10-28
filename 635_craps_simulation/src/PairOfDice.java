@@ -7,7 +7,7 @@
  * @author eric
  *
  */
-public class Dice
+public class PairOfDice
 {
 	// Instance fields (variables) may be declared anywhere in class body
 	// Convention: put at top
@@ -19,7 +19,7 @@ public class Dice
 	// Constructors (object initializers) also can be declared anywhere
 	// Convention: after instance fields/variables
 
-	public Dice()
+	public PairOfDice()
 	{
 		// initialize instance variables die1 and die2 by
 		// creating a new instance of each
@@ -29,7 +29,7 @@ public class Dice
 		this.roll();
 	}
 
-	public Dice(Die die1, Die die2) // overloaded constructor
+	public PairOfDice(Die die1, Die die2) // overloaded constructor
 	{
 		this.die1 = die1;
 		this.die2 = die2;
@@ -54,12 +54,7 @@ public class Dice
 
 	}
 
-	// the following method converts the internals of
-	// this Dice object, and returns a descriptive String:
-	//
-	// Roll of 7 => 4 + 3
-	//
-
+	
 	public String toString()
 	{
 		return "Roll of " + getLastRoll() + ": " + die1.getLastRoll() + " + " + die2.getLastRoll();
@@ -68,23 +63,28 @@ public class Dice
 
 	// static methods can go anywhere - but at end is standard
 
-	public static final int NUM_TRIALS = 360;
+	public static final int NUM_OF_ROLLS = 360;
 
 	public static void main(String[] args)
 	{
-		Dice dice1 = new Dice();
+		PairOfDice pairOfdice = new PairOfDice();
 		int snakeEyesCount = 0;
 
-		for (int i = 0; i < NUM_TRIALS; i++)
+		for (int i = 0; i < NUM_OF_ROLLS; i++)
 		{
-			dice1.roll();
-			StdOut.println(dice1);
+			pairOfdice.roll();
+			StdOut.println(pairOfdice);
 			
-			if (dice1.getLastRoll() == 2)
+			if (isSnakeEyes(pairOfdice))				//refactored from if (dice1.getLastRoll() == 2)
 				snakeEyesCount++;
 		}
 
 		StdOut.println("Actual count: " + snakeEyesCount);
-		StdOut.println("Expected count: " + (NUM_TRIALS / 36.0));
+		StdOut.println("Expected count: " + (NUM_OF_ROLLS / 36.0));
+	}
+
+	private static boolean isSnakeEyes(PairOfDice pairOfdice)
+	{
+		return pairOfdice.getLastRoll() == 2;
 	}
 }
